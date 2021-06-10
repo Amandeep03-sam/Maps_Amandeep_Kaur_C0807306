@@ -172,6 +172,7 @@ mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
         if (markerList.size() == 0) {
             MarkerOptions options = new MarkerOptions().position(latLng)
                     .title("A")
+                    .draggable(true)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.a))
                     .snippet("Distance " + String.valueOf(Math.round(distance(currentLatLong,latLng)) + "m"));
             markerList.add(mMap.addMarker(options));
@@ -179,6 +180,7 @@ mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
         } else if (markerList.size() == 1) {
             MarkerOptions options = new MarkerOptions().position(latLng)
                     .title("B")
+                    .draggable(true)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.b))
                     //.snippet(Toast.makeText(MapsActivity.this,  "Address: " +Address.getAddress(options, getBaseContext()), Toast.LENGTH_LONG).show())
                     .snippet("Distance " + String.valueOf(Math.round(distance(currentLatLong,latLng)) + "m"));;
@@ -186,12 +188,14 @@ mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
         } else if (markerList.size() == 2) {
             MarkerOptions options = new MarkerOptions().position(latLng)
                     .title("C")
+                    .draggable(true)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.c))
                     .snippet("Distance " + String.valueOf(Math.round(distance(currentLatLong,latLng)) + "m"));;
             markerList.add(mMap.addMarker(options));
         } else if (markerList.size() == 3) {
             MarkerOptions options = new MarkerOptions().position(latLng)
                     .title("D")
+                    .draggable(true)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.d))
                     .snippet("Distance " + String.valueOf(Math.round(distance(currentLatLong,latLng)) + "m"));;
             markerList.add(mMap.addMarker(options));
@@ -216,8 +220,12 @@ mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
         }
 
         shape = mMap.addPolygon(options);
+        //addListenersOnPolygon(shape);
 
     }
+
+
+
 
     private void clearMap() {
         for (Marker marker : markerList)
