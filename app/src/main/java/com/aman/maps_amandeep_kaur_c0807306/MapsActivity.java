@@ -41,6 +41,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
       private LatLng currentLatLong;
     private Marker homeMarker;
     private Marker destMarker;
+    List<Marker> latLngArrayListPolygon = new ArrayList<Marker>();
+    ArrayList<Double> distancesFromMidPointsOfPolygonEdges = new ArrayList<>();
+    List<String> allCityNames = new ArrayList<String>();
+    List<Integer> doesCityExist = new ArrayList<Integer>();
 
 
     Polygon shape;
@@ -134,11 +138,41 @@ mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
 
             }
         });
+        mMap.setOnPolygonClickListener(new GoogleMap.OnPolygonClickListener() {
+            @Override
+            public void onPolygonClick(@NonNull Polygon polygon) {
+                LatLng latLng1 = latLngArrayListPolygon.get(0).getPosition();
+                LatLng latLng2 = latLngArrayListPolygon.get(1).getPosition();
+                LatLng latLng3 = latLngArrayListPolygon.get(2).getPosition();
+                LatLng latLng4 = latLngArrayListPolygon.get(3).getPosition();
+                double length1 = mesaureLengthBetweenPoints(latLng1, latLng2);
+                double length2 = mesaureLengthBetweenPoints(latLng2, latLng3);
+                double length3 = mesaureLengthBetweenPoints(latLng3, latLng4);
+                double length4 = mesaureLengthBetweenPoints(latLng4, latLng1);
+
+                double totalLength = Double.parseDouble(String.format("%.2f", length1 + length2 + length3 + length4));
+
+                Toast.makeText(getBaseContext(), "A-B-C-D: " + totalLength + "Mile", Toast.LENGTH_LONG).show();
+            }
+        });
+
 
     }
 
 
+    public double mesaureLengthBetweenPoints(LatLng latLng1, LatLng latLng2) {
+        Location point1 = new Location("point1");
+        point1.setLatitude(latLng1.latitude);
+        point1.setLongitude(latLng1.longitude);
 
+        Location point2 = new Location("point2");
+        point2.setLatitude(latLng2.latitude);
+        point2.setLongitude(latLng2.longitude);
+
+        double distance = Double.parseDouble(String.format("%.2f", point2.distanceTo(point1) / 1610));
+
+        return distance;
+    }
 
 
     public static double distance(LatLng start, LatLng end){
@@ -175,6 +209,7 @@ mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
                     .draggable(true)
                     .icon(BitmapDescriptorFactory.fromResource(R.drawable.a))
                     .snippet("Distance " + String.valueOf(Math.round(distance(currentLatLong,latLng)) + "m"));
+
             markerList.add(mMap.addMarker(options));
 
         } else if (markerList.size() == 1) {
@@ -212,6 +247,7 @@ mMap.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
         PolygonOptions options = new PolygonOptions()
                 .fillColor(0x33000000)
                 .strokeColor(Color.RED)
+
                 .strokeWidth(5);
 
         for (int i = 0; i < POLYGON_SIDES; i++) {
